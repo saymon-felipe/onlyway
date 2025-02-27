@@ -1,16 +1,16 @@
 <template>
-    <section>
+    <div class="list">
         <h3 class="section-title">ÚLTIMAS TOCADAS</h3>
         <ul class="last-musics">
             <li v-for="(music, index) in lastMusics" :key="index" class="song">
                 <i class="fa-star" v-if="false" :class="music.starred ? 'fa-solid' : 'fa-regular'"></i>
                 <div class="song-informations">
-                    <p class="fontsize-md">{{ music.title }}</p>
+                    <p class="principal-text-md">{{ music.title }}</p>
                     <p class="fontsize-sm">{{ music.author }}</p>
                 </div>
             </li>
         </ul>
-    </section>
+    </div>
 </template>
 <script>
 export default {
@@ -88,10 +88,6 @@ export default {
 }
 </script>
 <style scoped>
-section {
-    margin-top: 3rem;
-}
-
 ul {
     & li {
         margin: 1rem 0;

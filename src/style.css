@@ -3,6 +3,7 @@
   --gray-medium: #a1a1a1;
   --gray: #666666;
   --orange: #FF7700;
+  --orange-low: #c95e01;
   --blue-low: #101F31;
   --blue: #223A57; 
   --blue-high: #0022FF;
@@ -24,13 +25,22 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: var(--orange) transparent;
 }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  overflow: hidden;
+  scroll-behavior: smooth;
   background: linear-gradient(to bottom right, var(--blue-low), var(--blue));
+}
+
+.no-scroll {
+  height: initial;
+  overflow: initial;
 }
 
 #app {
@@ -56,6 +66,12 @@ body {
   font-size: 70px;
   color: var(--orange);
   text-shadow: 0 0 20px rgba(245, 245, 245, 0.4);
+  font-weight: bold;
+}
+
+.principal-text-md {
+  font-size: 20px;
+  color: var(--orange);
   font-weight: bold;
 }
 
@@ -138,8 +154,19 @@ input {
   }
 }
 
-.home-frame {
-  margin-left: 1.5rem;
+section {
+  transition: opacity 0.4s ease-in-out;
+  opacity: 0;
+  position: absolute;
+  height: 50vh;
+  opacity: 1;
+  overflow-y: auto;
+  z-index: 3;
+  padding-right: 1rem;
+}
+
+.list {
+  margin-top: 3rem;
 }
 
 .personalized-input-range {

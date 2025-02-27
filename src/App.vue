@@ -1,12 +1,15 @@
 <template>
   <div class="system-frame">
-    <headerComponent @changeLink="changeBackgroundImage($event)" />
+    <headerComponent @changeLink="changeContent($event)" />
     <main class="main-frame">
       <searchComponent />
-      <homeComponent />
+      <div class="home-frame">
+        <homeComponent :style="'opacity: ' + (selectedMenu.home ? 1 : 0)" />
+        <scheduleComponent :style="'opacity: ' + (selectedMenu.schedule ? 1 : 0)" />
+      </div>
     </main>
-    <img class="system-side-image" id="image1" loading="lazy" :src="woman" alt="">
-    <img class="system-side-image" id="image2" loading="lazy" :src="microphone" alt="">
+    <img class="system-side-image" id="image1" loading="lazy" :style="'opacity: ' + (selectedMenu.home ? 1 : 0)" :src="woman" alt="">
+    <img class="system-side-image" id="image2" loading="lazy" :style="'opacity: ' + (selectedMenu.schedule ? 1 : 0)" :src="microphone" alt="">
     <footerComponent />
   </div>
 </template>
@@ -18,6 +21,7 @@ import headerComponent from "./components/headerComponent.vue";
 import footerComponent from "./components/footerComponent.vue";
 import searchComponent from "./components/searchComponent.vue";
 import homeComponent from "./components/homeComponent.vue";
+import scheduleComponent from "./components/scheduleComponent.vue";
 
 import woman from "./assets/img/sides/woman.webp";
 import microphone from "./assets/img/sides/microphone.webp";
@@ -29,13 +33,17 @@ export default {
       imageCache: {}, // Armazena URLs de imagens carregadas
       woman: woman,
       microphone: microphone,
-      loading: true
+      loading: true,
+      selectedMenu: {
+        home: true,
+        schedule: false
+      }
     };
   },
   watch: {
     loading: function () {
       if (!this.loading) {
-        this.changeBackgroundImage(1); //Imagem principal
+        this.changeContent(1); //Início
       }
     }
   },
@@ -70,18 +78,41 @@ export default {
     changeBackgroundImage(number) {
       $(".system-side-image").css("opacity", 0);
       $("#image" + number).css("opacity", 1);
+    },
+    changeContent: function (number) {
+      this.selectedMenu.home = false;
+      this.selectedMenu.schedule = false;
+      
+      switch (number) {
+        case 1: //Início
+          this.selectedMenu.home = true; 
+          this.changeBackgroundImage(1);
+          
+          break;
+        case 2: //Programação
+          this.selectedMenu.schedule = true;
+          this.changeBackgroundImage(2);
+          
+          break;
+      }
     }
   },
   components: {
     headerComponent,
     footerComponent,
     searchComponent,
-    homeComponent
+    homeComponent,
+    scheduleComponent
   }
 };
 </script>
 
 <style scoped>
+.home-frame {
+  margin-left: 1.5rem;
+  position: relative;
+}
+
 .system-frame {
   display: flex;
   margin: auto;

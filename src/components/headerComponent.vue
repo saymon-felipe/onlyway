@@ -5,32 +5,32 @@
         </a>
         <nav>
             <ul>
-                <li title="Início">
+                <li title="Início" v-on:click="changeLink(1)">
                     <a href="#home">
                         <i class="fa-solid fa-house"></i>
                     </a>
                 </li>
-                <li title="Programação">
+                <li title="Programação" v-on:click="changeLink(2)">
                     <a href="#schedule">
                         <i class="fa-solid fa-list"></i>
                     </a>
                 </li>
-                <li title="Músicas">
+                <li title="Músicas" v-on:click="changeLink(3)">
                     <a href="#musics">
                         <i class="fa-solid fa-music"></i>
                     </a>
                 </li>
-                <li title="Parcerias">
+                <li title="Parcerias" v-on:click="changeLink(4)">
                     <a href="#partnerships">
                         <i class="fa-solid fa-tower-broadcast"></i>
                     </a>
                 </li>
-                <li title="Anuncie conosco">
+                <li title="Anuncie conosco" v-on:click="changeLink(5)">
                     <a href="#advertise">
                         <i class="fa-solid fa-bullhorn"></i>
                     </a>
                 </li>
-                <li title="Contato">
+                <li title="Contato" v-on:click="changeLink(6)">
                     <a href="#contact">
                         <i class="fa-solid fa-phone"></i>
                     </a>
@@ -39,6 +39,15 @@
         </nav>
     </header>
 </template>
+<script>
+export default {
+    methods: {
+        changeLink: function (number) {
+            this.$emit("changeLink", number);
+        }
+    }
+}
+</script>
 <style scoped>
 header {
     display: flex;

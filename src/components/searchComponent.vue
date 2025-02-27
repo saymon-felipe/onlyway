@@ -12,6 +12,7 @@ export default {
 <style scoped>
 .input-search {
     position: relative;
+    margin-bottom: 3rem;
 
     & i {
         position: absolute;

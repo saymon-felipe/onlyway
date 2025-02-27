@@ -1,8 +1,9 @@
 <template>
   <div class="system-frame">
     <headerComponent />
-    <main>
+    <main class="main-frame">
       <searchComponent />
+      <homeComponent />
     </main>
     <img class="system-side-image" :src="sectionImage" alt="">
     <footerComponent />
@@ -13,6 +14,7 @@
 import headerComponent from "./components/headerComponent.vue";
 import footerComponent from "./components/footerComponent.vue";
 import searchComponent from "./components/searchComponent.vue";
+import homeComponent from "./components/homeComponent.vue";
 
 import woman from "./assets/img/sides/woman.png";
 import microphone from "./assets/img/sides/microphone.png";
@@ -29,7 +31,8 @@ export default {
   components: {
     headerComponent,
     footerComponent,
-    searchComponent
+    searchComponent,
+    homeComponent
   }
 }
 </script>
@@ -37,17 +40,24 @@ export default {
 .system-frame {
   display: flex;
   margin: auto;
+  overflow: hidden;
   padding: 3rem 2rem;
   max-width: 1400px;
   position: relative;
   min-height: 100vh;
+  gap: calc(0.5rem + 3vw);
 }
 
 .system-side-image {
-  height: 80vh;
+  height: 100vh;
   position: absolute;
-  right: 0;
+  right: -7%;
   top: 0;
+}
+
+.main-frame {
+  width: 50%;
+  min-width: 200px;
 }
 
 @media (max-width: 1222px) {
@@ -59,6 +69,10 @@ export default {
 @media (max-width: 1035px) {
   .system-side-image {
     display: none;
+  }
+
+  .main-frame {
+    width: 100%;
   }
 }
 

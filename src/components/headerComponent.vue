@@ -102,5 +102,11 @@ ul {
             }
         }
     }
+
+    .brand {
+        & img {
+            width: 2.4rem;
+        }
+    }
 }
 </style>

@@ -52,17 +52,23 @@ body {
   font-family: 'Orbitron', sans-serif;
 } 
 
-.principal-font {
+.principal-text {
   font-size: 70px;
   color: var(--orange);
   text-shadow: 0 0 20px rgba(245, 245, 245, 0.4);
   font-weight: bold;
 }
 
-.secondary-font {
+.secondary-text {
   text-shadow: 0 0 20px rgba(245, 245, 245, 0.4);
   color: var(--gray-high);
   font-size: 30px;
+}
+
+.section-title {
+  font-size: 15px;
+  font-weight: bold;
+  text-transform: uppercase;
 }
 
 .fontsize-xl {
@@ -81,6 +87,39 @@ body {
   font-size: 15px;
 }
 
+@media (max-width: 600px) {
+  .fontsize-xl {
+    font-size: 50px;
+  }
+  
+  .fontsize-lg {
+    font-size: 20px;
+  }
+  
+  .fontsize-md {
+    font-size: 15px;
+  }
+  
+  .fontsize-sm {
+    font-size: 12px;
+  }
+
+  .principal-text {
+    font-size: 50px;
+    color: var(--orange);
+    text-shadow: 0 0 20px rgba(245, 245, 245, 0.4);
+    font-weight: bold;
+  }
+  
+  .secondary-text {
+    font-size: 20px;
+  }
+  
+  .section-title {
+    font-size: 12px;
+  }
+}
+
 input {
   border-radius: 2rem;
   background: var(--blue);
@@ -96,5 +135,91 @@ input {
 
   &:focus {
     outline: 3px solid rgba(255, 119, 0, 0.5);
+  }
+}
+
+.home-frame {
+  margin-left: 1.5rem;
+}
+
+.personalized-input-range {
+  -webkit-appearance: none; /* Remove a aparência padrão do input */
+  width: 100%; /* Largura total */
+  height: 8px; /* Altura da barra */
+  background: var(--gray-high); /* Cor da barra */
+  border-radius: 5px; /* Bordas arredondadas */
+  outline: none; /* Remove a borda ao focar */
+  margin: .7rem auto;
+  border: none !important;
+  padding: initial;
+  outline: none !important;
+}
+
+  .personalized-input-range::-webkit-slider-thumb {
+      -webkit-appearance: none; /* Remove a aparência padrão do thumb */
+      appearance: none;
+      width: 15px; /* Largura do thumb */
+      height: 15px; /* Altura do thumb */
+      background: var(--orange); /* Cor do thumb (círculo) */
+      border-radius: 50%; /* Tornar o thumb circular */
+      cursor: pointer; /* Cursor de ponteiro ao passar por cima */
+      border: 1px solid var(--orange); /* Borda ao redor do thumb */
+      position: relative;
+      top: -5px; /* Ajusta a posição vertical do thumb */
+  }
+
+  .personalized-input-range::-moz-range-thumb {
+      width: 15px; /* Largura do thumb */
+      height: 15px; /* Altura do thumb */
+      background: var(--orange); /* Cor do thumb (círculo) */
+      border-radius: 50%; /* Tornar o thumb circular */
+      cursor: pointer; /* Cursor de ponteiro ao passar por cima */
+      border: 1px solid var(--orange); /* Borda ao redor do thumb */
+  }
+
+  .personalized-input-range::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 5px;
+      background: var(--gray-high); /* Cor da barra */
+      border-radius: 5px; /* Bordas arredondadas */
+  }
+
+  .personalized-input-range::-moz-range-track {
+      width: 100%;
+      height: 5px;
+      background: var(--gray-high); /* Cor da barra */
+      border-radius: 5px; /* Bordas arredondadas */
+  }
+
+.rounded-button {
+  width: 43px;
+  height: 43px;
+  min-width: 43px;
+  min-height: 43px;
+  max-width: 43px;
+  max-height: 43px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(to bottom right, var(--blue), var(--orange));
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: filter 0.2s ease-in-out;
+
+  &:hover {
+    filter: brightness(1.2);
+  }
+
+  &::after {
+    content: "";
+    background: rgba(255, 255, 255, 0.15);
+    transform: rotate(45deg);
+    width: 200%;
+    position: absolute;
+    top: -120%;
+    left: -120%;
+    height: 200%;
+    z-index: 2;
   }
 }

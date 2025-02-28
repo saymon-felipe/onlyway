@@ -4,12 +4,18 @@
     <main class="main-frame">
       <searchComponent />
       <div class="home-frame">
-        <homeComponent :style="'opacity: ' + (selectedMenu.home ? 1 : 0)" />
-        <scheduleComponent :style="'opacity: ' + (selectedMenu.schedule ? 1 : 0)" />
+        <homeComponent v-if="selectedMenu.home" />
+        <scheduleComponent v-if="selectedMenu.schedule" />
+        <songsComponent v-if="selectedMenu.music" />
+        <partnershipsComponent v-if="selectedMenu.business" />
+        <contactComponent v-if="selectedMenu.contact" />
       </div>
     </main>
-    <img class="system-side-image" id="image1" loading="lazy" :style="'opacity: ' + (selectedMenu.home ? 1 : 0)" :src="woman" alt="">
-    <img class="system-side-image" id="image2" loading="lazy" :style="'opacity: ' + (selectedMenu.schedule ? 1 : 0)" :src="microphone" alt="">
+    <img class="system-side-image" id="image1" loading="lazy" :style="'opacity: ' + (selectedMenu.home ? 1 : 0)" :src="woman">
+    <img class="system-side-image" id="image2" loading="lazy" :style="'opacity: ' + (selectedMenu.schedule ? 1 : 0)" :src="microphone">
+    <img class="system-side-image" id="image3" loading="lazy" :style="'opacity: ' + (selectedMenu.music ? 1 : 0)" :src="music">
+    <img class="system-side-image" id="image4" loading="lazy" :style="'opacity: ' + (selectedMenu.business ? 1 : 0)" :src="business">
+    <img class="system-side-image" id="image5" loading="lazy" :style="'opacity: ' + (selectedMenu.contact ? 1 : 0)" :src="smartphone">
     <footerComponent />
   </div>
 </template>
@@ -22,9 +28,15 @@ import footerComponent from "./components/footerComponent.vue";
 import searchComponent from "./components/searchComponent.vue";
 import homeComponent from "./components/homeComponent.vue";
 import scheduleComponent from "./components/scheduleComponent.vue";
+import songsComponent from "./components/songsComponent.vue";
+import partnershipsComponent from "./components/partnershipsComponent.vue";
+import contactComponent from "./components/contactComponent.vue";
 
 import woman from "./assets/img/sides/woman.webp";
 import microphone from "./assets/img/sides/microphone.webp";
+import music from "./assets/img/sides/music.webp";
+import business from "./assets/img/sides/business.webp";
+import smartphone from "./assets/img/sides/smartphone.webp";
 
 export default {
   data() {
@@ -33,10 +45,16 @@ export default {
       imageCache: {}, // Armazena URLs de imagens carregadas
       woman: woman,
       microphone: microphone,
+      music: music,
+      business: business,
+      smartphone: smartphone,
       loading: true,
       selectedMenu: {
         home: true,
-        schedule: false
+        schedule: false,
+        music: false,
+        business: false,
+        contact: false
       }
     };
   },
@@ -82,6 +100,9 @@ export default {
     changeContent: function (number) {
       this.selectedMenu.home = false;
       this.selectedMenu.schedule = false;
+      this.selectedMenu.music = false;
+      this.selectedMenu.business = false;
+      this.selectedMenu.contact = false;
       
       switch (number) {
         case 1: //Início
@@ -94,6 +115,19 @@ export default {
           this.changeBackgroundImage(2);
           
           break;
+        case 3: //Músicas
+          this.selectedMenu.music = true;
+          this.changeBackgroundImage(3);
+          
+          break;
+        case 4: //Parcerias
+          this.selectedMenu.business = true;
+          this.changeBackgroundImage(4);
+          break;
+        case 5:
+          this.selectedMenu.contact = true;
+          this.changeBackgroundImage(5);
+          break;
       }
     }
   },
@@ -102,7 +136,10 @@ export default {
     footerComponent,
     searchComponent,
     homeComponent,
-    scheduleComponent
+    scheduleComponent,
+    songsComponent,
+    partnershipsComponent,
+    contactComponent
   }
 };
 </script>

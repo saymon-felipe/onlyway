@@ -154,11 +154,22 @@ input {
   }
 }
 
+h1, h2, h3, h4, h5, h6, span, p, a {
+  color: var(--gray-high);
+}
+
+a {
+  &:visited {
+    color: var(--gray-high);
+  }
+}
+
 section {
   transition: opacity 0.4s ease-in-out;
   opacity: 0;
   position: absolute;
   height: 50vh;
+  width: 100%;
   opacity: 1;
   overflow-y: auto;
   z-index: 3;
@@ -166,7 +177,21 @@ section {
 }
 
 .list {
-  margin-top: 3rem;
+  margin-top: 1rem;
+}
+
+.entity-informations {
+  width: 100%;
+}
+
+.link {
+  text-decoration: underline;
+  cursor: pointer;
+
+  & a {
+    color: inherit;
+    text-decoration: inherit;
+  }
 }
 
 .personalized-input-range {
@@ -249,4 +274,13 @@ section {
     height: 200%;
     z-index: 2;
   }
+}
+
+.informations-footer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.fa-star {
+  cursor: pointer;
 }

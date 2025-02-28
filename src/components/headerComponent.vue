@@ -6,32 +6,27 @@
         <nav>
             <ul>
                 <li title="Início" v-on:click="changeLink(1)">
-                    <a href="#home">
+                    <a>
                         <i class="fa-solid fa-house"></i>
                     </a>
                 </li>
                 <li title="Programação" v-on:click="changeLink(2)">
-                    <a href="#schedule">
+                    <a>
                         <i class="fa-solid fa-list"></i>
                     </a>
                 </li>
                 <li title="Músicas" v-on:click="changeLink(3)">
-                    <a href="#musics">
+                    <a>
                         <i class="fa-solid fa-music"></i>
                     </a>
                 </li>
                 <li title="Parcerias" v-on:click="changeLink(4)">
-                    <a href="#partnerships">
+                    <a>
                         <i class="fa-solid fa-tower-broadcast"></i>
                     </a>
                 </li>
-                <li title="Anuncie conosco" v-on:click="changeLink(5)">
-                    <a href="#advertise">
-                        <i class="fa-solid fa-bullhorn"></i>
-                    </a>
-                </li>
-                <li title="Contato" v-on:click="changeLink(6)">
-                    <a href="#contact">
+                <li title="Contato" v-on:click="changeLink(5)">
+                    <a>
                         <i class="fa-solid fa-phone"></i>
                     </a>
                 </li>
@@ -68,6 +63,7 @@ ul {
 
     & li {
         margin: 1rem 0;
+        cursor: pointer;
 
         & a {
             width: 64px;

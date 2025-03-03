@@ -17,6 +17,12 @@
 </template>
 <script>
 export default {
+    props: ["search"],
+    watch: {
+        search: function () {
+            console.log(this.search)
+        }      
+    },
     data() {
         return {
             musics: [
@@ -43,6 +49,9 @@ export default {
                 }
             ]
         }
+    },
+    mounted: function () {
+        console.log(this.search)
     }
 }
 </script>

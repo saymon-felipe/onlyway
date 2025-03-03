@@ -136,7 +136,7 @@ body {
   }
 }
 
-input {
+input, textarea, select, .btn {
   border-radius: 2rem;
   background: var(--blue);
   padding: .7rem;
@@ -154,8 +154,27 @@ input {
   }
 }
 
+.btn {
+  cursor: pointer;
+  background: var(--orange);
+  color: var(--blue-low);
+  font-weight: bold;
+  text-transform: uppercase;
+
+  &:hover {
+    background: var(--orange-low);
+  }
+}
+
 h1, h2, h3, h4, h5, h6, span, p, a {
   color: var(--gray-high);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 70px;
+  border-radius: 1.5rem;
+  font-family: 'Open Sans', sans-serif;
 }
 
 a {
@@ -173,11 +192,16 @@ section {
   opacity: 1;
   overflow-y: auto;
   z-index: 3;
+  padding: 3px;
   padding-right: 1rem;
 }
 
 .list {
   margin-top: 1rem;
+}
+
+.form-group {
+  margin: 1.5rem 0;
 }
 
 .entity-informations {
@@ -283,4 +307,10 @@ section {
 
 .fa-star {
   cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  section {
+    height: calc(100vh - 246px);
+  }
 }

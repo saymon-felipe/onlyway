@@ -2,11 +2,11 @@
   <div class="system-frame">
     <headerComponent @changeLink="changeContent($event)" />
     <main class="main-frame">
-      <searchComponent />
+      <searchComponent @searchSong="search($event)" />
       <div class="home-frame">
         <homeComponent v-if="selectedMenu.home" />
         <scheduleComponent v-if="selectedMenu.schedule" />
-        <songsComponent v-if="selectedMenu.music" />
+        <songsComponent :search="searchString" v-if="selectedMenu.music" />
         <partnershipsComponent v-if="selectedMenu.business" />
         <contactComponent v-if="selectedMenu.contact" />
       </div>
@@ -55,7 +55,8 @@ export default {
         music: false,
         business: false,
         contact: false
-      }
+      },
+      searchString: ""
     };
   },
   watch: {
@@ -93,6 +94,13 @@ export default {
     });
   },
   methods: {
+    search: function (string) {
+      this.changeContent(3);
+
+      this.$nextTick(() => {
+        this.searchString = string;
+      })
+    },
     changeBackgroundImage(number) {
       $(".system-side-image").css("opacity", 0);
       $("#image" + number).css("opacity", 1);
@@ -116,6 +124,7 @@ export default {
           
           break;
         case 3: //Músicas
+          this.searchString = "";
           this.selectedMenu.music = true;
           this.changeBackgroundImage(3);
           

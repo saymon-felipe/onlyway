@@ -1,8 +1,24 @@
 <template>
     <footer>
+        <div class="responsive-radio-player" v-show="responsive">
+            <i class="fa-solid fa-circle-xmark close-button" v-on:click="responsive = !responsive"></i>
+            <img :src="$radioData.art" :alt="$radioData.title">
+            <div class="player-container">
+                <div class="visualizer-container">
+                    <div class="visualizer-text">
+                        <p>TOCANDO AGORA</p>
+                        <h2 :title="$radioData.title">{{ $radioData.title }}</h2>
+                    </div>
+                    <canvas class="visualizer"></canvas>
+                </div>
+                <i class="fas rounded-button" :class="isPlaying ? 'fa-pause' : 'fa-play'" @click="togglePlay"></i>
+            </div>
+        </div>
         <div class="radio-player">
-            <div class="radio-cover">
+            <div class="radio-cover" v-on:click="toggleResponsive()">
+                <i class="fa-solid fa-angle-up responsive-open-player"></i>
                 <img :src="$radioData.art" :alt="$radioData.title">
+                <i class="fas fa-music playing-button" :class="isPlaying ? 'playing' : ''"></i>
             </div>
             <div class="player-container">
                 <i class="fas rounded-button" :class="isPlaying ? 'fa-pause' : 'fa-play'" @click="togglePlay"></i>
@@ -11,7 +27,7 @@
                         <p>TOCANDO AGORA</p>
                         <h2 :title="$radioData.title">{{ $radioData.title }}</h2>
                     </div>
-                    <canvas ref="canvas" class="visualizer"></canvas>
+                    <canvas class="visualizer"></canvas>
                 </div>
                 <div class="volume">
                     <i class="fas rounded-button" :class="volume == 0 ? 'fa-volume-off' : 'fa-volume-up'" v-on:click="controlVolume =! controlVolume"></i>
@@ -23,10 +39,13 @@
                 <audio ref="audio" src="https://stream3.svrdedicado.org/8042/stream" crossorigin="anonymous" preload="auto" @play="onPlay" @pause="onPause" @ended="onEnd"></audio>
             </div>
         </div>
+        <p id="signature">&copy; {{ new Date().getFullYear() }} OnlyWay - Todos os direitos reservados.</p>
     </footer>
 </template>
 
 <script>
+import $ from 'jquery';
+
 export default {
     data() {
         return {
@@ -39,67 +58,77 @@ export default {
             dataArray: [],
             controlVolume: false,
             hasInitializedAudio: false, // Para evitar múltiplas inicializações
+            responsive: false
         }
     },
     mounted: function () {
         this.drawVisualizer(true);
     },
     methods: {
+        toggleResponsive: function () {
+            if (window.innerWidth < 768) {
+                this.responsive = !this.responsive;
+            }
+        },
         drawVisualizer(initial = false) {
-            const canvas = this.$refs.canvas;
-            const canvasContext = canvas.getContext('2d');
+            const canvasList = $("canvas");
+
+            for (let i = 0; i < canvasList.length; i++) {
+                const canvas = canvasList[i];
+                const canvasContext = canvas.getContext('2d');
             
-            const scale = window.devicePixelRatio || 1;
-            canvas.width = canvas.clientWidth * scale;
-            canvas.height = canvas.clientHeight * scale;
-            canvasContext.scale(scale, scale);
+                const scale = window.devicePixelRatio || 1;
+                canvas.width = canvas.clientWidth * scale;
+                canvas.height = canvas.clientHeight * scale;
+                canvasContext.scale(scale, scale);
 
-            const draw = () => {
-                requestAnimationFrame(draw);
+                const draw = () => {
+                    requestAnimationFrame(draw);
 
-                if (!initial) {
-                    this.analyser.getByteFrequencyData(this.dataArray);
-                } else {
-                    this.bufferLength = 64;
-                }
+                    if (!initial) {
+                        this.analyser.getByteFrequencyData(this.dataArray);
+                    } else {
+                        this.bufferLength = 64;
+                    }
 
-                canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-        
-                let spacing = 5;
-                const barWidth = (canvas.width / this.bufferLength) * 0.7;
-                let x = 0;
-                const maxHeight = canvas.height * 0.8;
-                const centerY = canvas.height / 2;
+                    canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+            
+                    let spacing = 5;
+                    const barWidth = (canvas.width / this.bufferLength) * 0.7;
+                    let x = 0;
+                    const maxHeight = canvas.clientHeight * 0.8;
+                    const centerY = canvas.clientHeight / 2;
 
-                const drawRoundedRect = (ctx, x, y, width, height, radius) => {
-                    ctx.beginPath();
-                    ctx.moveTo(x + radius, y);
-                    ctx.lineTo(x + width - radius, y);
-                    ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-                    ctx.lineTo(x + width, y + height - radius);
-                    ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-                    ctx.lineTo(x + radius, y + height);
-                    ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-                    ctx.lineTo(x, y + radius);
-                    ctx.quadraticCurveTo(x, y, x + radius, y);
-                    ctx.closePath();
-                    ctx.fill();
+                    const drawRoundedRect = (ctx, x, y, width, height, radius) => {
+                        ctx.beginPath();
+                        ctx.moveTo(x + radius, y);
+                        ctx.lineTo(x + width - radius, y);
+                        ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+                        ctx.lineTo(x + width, y + height - radius);
+                        ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+                        ctx.lineTo(x + radius, y + height);
+                        ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+                        ctx.lineTo(x, y + radius);
+                        ctx.quadraticCurveTo(x, y, x + radius, y);
+                        ctx.closePath();
+                        ctx.fill();
+                    };
+
+                    for (let i = 0; i < this.bufferLength; i++) {
+                        let barHeight = !initial ? Math.max(Math.min(this.dataArray[i] / 2.5, maxHeight), 5) : 5;
+                        let barX = x;
+                        let barY = centerY - barHeight / 2;
+                        let borderRadius = Math.min(barWidth / 2, barHeight / 2);
+
+                        canvasContext.fillStyle = 'rgb(255, ' + (barHeight + 100) + ',0)';
+                        drawRoundedRect(canvasContext, barX, barY, barWidth, barHeight, borderRadius);
+
+                        x += barWidth + spacing;
+                    }
                 };
-
-                for (let i = 0; i < this.bufferLength; i++) {
-                    let barHeight = !initial ? Math.max(Math.min(this.dataArray[i] / 2.5, maxHeight), 5) : 5;
-                    let barX = x;
-                    let barY = centerY - barHeight / 2;
-                    let borderRadius = Math.min(barWidth / 2, barHeight / 2);
-
-                    canvasContext.fillStyle = 'rgb(255, ' + (barHeight + 100) + ',0)';
-                    drawRoundedRect(canvasContext, barX, barY, barWidth, barHeight, borderRadius);
-
-                    x += barWidth + spacing;
-                }
-            };
-    
-            draw();
+        
+                draw();
+            }
         },
         initAudioContext(initial = false) {
             if (!this.hasInitializedAudio) {
@@ -172,6 +201,12 @@ export default {
 }
 </script>
 <style scoped>
+#signature {
+    position: fixed;
+    bottom: 10px;
+    color: var(--gray-high);
+}
+
 footer {
     position: fixed;
     bottom: 0;
@@ -182,6 +217,7 @@ footer {
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 3;
 }
 
 .radio-player {
@@ -193,7 +229,7 @@ footer {
     left: 0;
     right: 0;
     margin: auto;
-    width: 70vw;
+    width: 90vw;
     max-width: 95vw;
     padding: 1rem;
     max-width: 1300px;
@@ -260,6 +296,50 @@ footer {
             font-size: .9rem;
         }
     }
+
+    & .playing-button {
+        color: var(--white);
+        font-size: 0.8rem;
+        width: 30px;
+        height: 30px;
+        background: rgba(0, 0, 0, 0.9);
+        border-radius: 50%;
+        place-items: center;
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        display: grid;
+    }
+
+    & .playing-button.playing {
+        animation: rotate 5s linear infinite;
+    }
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.responsive-open-player {
+    z-index: 3;
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    font-weight: bold;
+    background: var(--orange-low);
+    width: 20px;
+    height: 20px;
+    border-radius: 1rem;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    display: none;
 }
 
 .player-container {
@@ -268,6 +348,51 @@ footer {
     place-items: center;
     gap: 1.5rem;
     margin-left: 1.5rem;
+}
+
+.responsive-radio-player {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    padding: 2rem;
+    padding-top: 6rem;
+    background: radial-gradient(ellipse at top right, #d49583, #5e62a6, transparent);
+    background-color: var(--blue);
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    & img {
+        width: 100%;
+        height: 30vh;
+        border-radius: 1rem;
+        object-fit: cover;
+    }
+
+    & .player-container {
+        display: flex;
+        flex-direction: column;
+        margin: 2rem 0;
+
+        & .visualizer-text {
+            margin-bottom: 1rem;
+        }
+    }
+
+    & .close-button {
+        position: absolute;
+        right: 2rem;
+        font-size: 2rem;
+        cursor: pointer;
+        top: 2rem;
+    }
+
+    & .visualizer {
+        min-height: initial;
+    }
 }
 
 @keyframes scroll-text {
@@ -423,5 +548,31 @@ cursor: pointer;
 100% {
     transform: rotate(360deg);
 }
+}
+
+@media (max-width: 768px) {
+    .responsive-open-player {
+        display: grid;
+    }
+
+    .radio-player .player-container {
+        display: none;
+    }
+
+    .radio-player img, .radio-cover {
+        width: 100px !important;
+        height: 100px !important;
+        cursor: pointer;
+    }
+
+    .radio-player {
+        bottom: 0;
+        margin: 0;
+        margin-bottom: 25px;
+    }
+
+    footer {
+        height: 150px;
+    }
 }
 </style>

@@ -1,12 +1,23 @@
 <template>
     <div class="input-search">
         <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" placeholder="Procure uma música ou artista">
+        <input type="text" placeholder="Procure uma música ou artista" v-on:keypress="searchSong($event)">
     </div>
 </template>
 <script>
+import $ from 'jquery';
+
 export default { 
-    
+    methods: {
+        searchSong: function (event) {
+            let element = $(event.target);
+            let value = element.val();
+
+            if (event.key === "Enter" && value.trim() != "") {
+                this.$emit("searchSong", value);
+            }
+        }
+    }
 }
 </script>
 <style scoped>

@@ -73,6 +73,10 @@ body {
   font-size: 20px;
   color: var(--orange);
   font-weight: bold;
+
+  &:hover {
+    color: var(--orange-low);
+  }
 }
 
 .secondary-text {

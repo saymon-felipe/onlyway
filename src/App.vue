@@ -1,6 +1,7 @@
 <template>
   <div class="system-frame">
     <headerComponent @changeLink="changeContent($event)" />
+    <authUser />
     <main class="main-frame">
       <searchComponent @searchSong="search($event)" />
       <div class="home-frame">
@@ -31,6 +32,7 @@ import scheduleComponent from "./components/scheduleComponent.vue";
 import songsComponent from "./components/songsComponent.vue";
 import partnershipsComponent from "./components/partnershipsComponent.vue";
 import contactComponent from "./components/contactComponent.vue";
+import authUser from "./components/authUser.vue";
 
 import woman from "./assets/img/sides/woman.webp";
 import microphone from "./assets/img/sides/microphone.webp";
@@ -148,7 +150,8 @@ export default {
     scheduleComponent,
     songsComponent,
     partnershipsComponent,
-    contactComponent
+    contactComponent,
+    authUser
   }
 };
 </script>

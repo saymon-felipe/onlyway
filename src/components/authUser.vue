@@ -27,7 +27,6 @@
     
 </template>
 <script>
-import api from "../../configs/api";
 import { GoogleLogin } from 'vue3-google-login';
 
 export default {
@@ -43,22 +42,29 @@ export default {
         handleLoginSuccess(response) {
             this.openContainer = false;
 
-            api.post("usuarios/google-login", { token: response.code }).then((results) => {
-                Object.assign(this.$user, results.data.returnObj);
+            this.$api.post("usuarios/google-login", { token: response.code }).then((results) => {
+                Object.assign(this.$user, results.data.returnObj.user);
                 localStorage.setItem("user", JSON.stringify(this.$user));
+                localStorage.setItem("onlywayJwt", results.data.returnObj.token);
+
+                this.$api.defaults.headers.common['Authorization'] = `Bearer ${results.data.returnObj.token}`;
             })
         },
         logout: function () {
             this.openContainer = false;
             localStorage.removeItem("user");
+            localStorage.removeItem("onlywayJwt");
+            this.$api.defaults.headers.common['Authorization'] = "";
             Object.assign(this.$user, { email: "", given_name: "", id: "", name: "", picture: "", verified_email: false });
         }
     },
     mounted: function () {
         let user = localStorage.getItem("user");
+        let jwt = localStorage.getItem("onlywayJwt");
 
-        if (user) {
+        if (user && jwt) {
             Object.assign(this.$user, JSON.parse(user));
+            this.$api.defaults.headers.common['Authorization'] = `Bearer ${jwt}`;
         }
     }
 }
@@ -94,6 +100,10 @@ export default {
         height: 40px;
         border-radius: 50%;
     }
+
+    & p {
+        margin: 0;
+    }
 }
 
 .wrapper {
@@ -127,6 +137,12 @@ export default {
     & ul {
         list-style: none;
         cursor: pointer;
+        margin: 0;
+        padding: 0;
+
+        & li {
+            color: var(--gray-high);
+        }
     }
 
     & button {
@@ -162,5 +178,28 @@ export default {
     border-radius: 1rem;
     border: 1px solid var(--orange);
     cursor: pointer;
+    text-decoration: none;
+}
+
+@media (max-width: 1035px) {
+    .user {
+        position: relative;
+        top: initial;
+        right: initial;
+    }
+
+    .user-display {
+        background: transparent;
+        border: none;
+        padding: 0;
+
+        & p {
+            display: none;
+        }
+
+        & img {
+            border: 1px solid var(--orange);
+        }
+    }
 }
 </style>

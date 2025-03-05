@@ -286,6 +286,7 @@ section {
   overflow: hidden;
   cursor: pointer;
   transition: filter 0.2s ease-in-out;
+  color: var(--gray-high);
 
   &:hover {
     filter: brightness(1.2);
@@ -301,6 +302,28 @@ section {
     left: -120%;
     height: 200%;
     z-index: 2;
+  }
+}
+
+.btn-loading::after {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 5px solid var(--gray-high);
+  border-top-color: var(--orange-low);
+  animation: spin 1s linear infinite;
+  margin-left: 1rem;
+}
+
+@keyframes spin {
+  0% {
+      transform: rotate(0);
+  }
+
+  100% {
+      transform: rotate(360deg);
   }
 }
 

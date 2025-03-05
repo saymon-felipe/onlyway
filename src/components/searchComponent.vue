@@ -1,11 +1,15 @@
 <template>
-    <div class="input-search">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" placeholder="Procure uma música ou artista" v-on:keypress="searchSong($event)">
+    <div class="search-container">
+        <div class="input-search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="Procure uma música ou artista" v-on:keydown="searchSong($event)">
+        </div>
+        <authUser />
     </div>
 </template>
 <script>
 import $ from 'jquery';
+import authUser from "./authUser.vue";
 
 export default { 
     methods: {
@@ -13,17 +17,18 @@ export default {
             let element = $(event.target);
             let value = element.val();
 
-            if (event.key === "Enter" && value.trim() != "") {
-                this.$emit("searchSong", value);
-            }
+            this.$emit("searchSong", value);
         }
+    },
+    components: {
+        authUser
     }
 }
 </script>
 <style scoped>
 .input-search {
     position: relative;
-    margin-bottom: 3rem;
+    flex: 1;
 
     & i {
         position: absolute;
@@ -39,5 +44,12 @@ export default {
     & input {
         padding-left: 4rem;
     }
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 3rem;
+    gap: 1.5rem;
 }
 </style>

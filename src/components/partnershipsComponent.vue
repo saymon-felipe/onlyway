@@ -33,46 +33,6 @@ export default {
                     description: "Agência WEB",
                     year: 2025,
                     url: "https://rabsystems.com.br?utm_source=onlyway"                
-                },
-                {
-                    id: 1,
-                    name: "Rabsystems",
-                    image: rabsystems,
-                    description: "Agência WEB",
-                    year: 2025,
-                    url: "https://rabsystems.com.br?utm_source=onlyway"                           
-                },
-                {
-                    id: 2,
-                    name: "Rabsystems",
-                    image: rabsystems,
-                    description: "Agência WEB",
-                    year: 2025,
-                    url: "https://rabsystems.com.br?utm_source=onlyway"                
-                },
-                {
-                    id: 3,
-                    name: "Rabsystems",
-                    image: rabsystems,
-                    description: "Agência WEB",
-                    year: 2025,
-                    url: "https://rabsystems.com.br?utm_source=onlyway"                
-                },
-                {
-                    id: 3,
-                    name: "Rabsystems",
-                    image: rabsystems,
-                    description: "Agência WEB",
-                    year: 2025,
-                    url: "https://rabsystems.com.br?utm_source=onlyway"                
-                },
-                {
-                    id: 3,
-                    name: "Rabsystems",
-                    image: rabsystems,
-                    description: "Agência WEB",
-                    year: 2025,
-                    url: "https://rabsystems.com.br?utm_source=onlyway"                
                 }
             ]
         }

@@ -1,19 +1,19 @@
 <template>
-    <footer>
-        <div class="responsive-radio-player" v-show="responsive">
-            <i class="fa-solid fa-circle-xmark close-button" v-on:click="responsive = !responsive"></i>
-            <img :src="$radioData.art" :alt="$radioData.title">
-            <div class="player-container">
-                <div class="visualizer-container">
-                    <div class="visualizer-text">
-                        <p>TOCANDO AGORA</p>
-                        <h2 :title="$radioData.title">{{ $radioData.title }}</h2>
-                    </div>
-                    <canvas class="visualizer"></canvas>
+    <div class="responsive-radio-player" v-show="responsive">
+        <i class="fa-solid fa-circle-xmark close-button" v-on:click="responsive = !responsive"></i>
+        <img :src="$radioData.art" :alt="$radioData.title">
+        <div class="player-container">
+            <div class="visualizer-container">
+                <div class="visualizer-text">
+                    <p>TOCANDO AGORA</p>
+                    <h2 :title="$radioData.title">{{ $radioData.title }}</h2>
                 </div>
-                <i class="fas rounded-button" :class="isPlaying ? 'fa-pause' : 'fa-play'" @click="togglePlay"></i>
+                <canvas class="visualizer"></canvas>
             </div>
+            <i class="fas rounded-button" :class="isPlaying ? 'fa-pause' : 'fa-play'" @click="togglePlay"></i>
         </div>
+    </div>
+    <footer>
         <div class="radio-player">
             <div class="radio-cover" v-on:click="toggleResponsive()">
                 <i class="fa-solid fa-angle-up responsive-open-player"></i>
@@ -36,7 +36,7 @@
                     </div>
                 </div>
                 <div class="control-volume-wrapper" v-if="controlVolume" v-on:click="controlVolume = false"></div>
-                <audio ref="audio" src="https://stream3.svrdedicado.org/8042/stream" crossorigin="anonymous" preload="auto" @play="onPlay" @pause="onPause" @ended="onEnd"></audio>
+                <audio ref="audio" src="https://stream3.svrdedicado.org/onlyway/stream" crossorigin="anonymous" preload="auto" @play="onPlay" @pause="onPause" @ended="onEnd"></audio>
             </div>
         </div>
         <p id="signature">&copy; {{ new Date().getFullYear() }} OnlyWay - Todos os direitos reservados.</p>
@@ -203,7 +203,7 @@ export default {
 <style scoped>
 #signature {
     position: fixed;
-    bottom: 10px;
+    bottom: 0;
     color: var(--gray-high);
 }
 
@@ -218,6 +218,7 @@ footer {
     justify-content: center;
     align-items: center;
     z-index: 3;
+    backdrop-filter: blur(3px);
 }
 
 .radio-player {
@@ -298,7 +299,7 @@ footer {
     }
 
     & .playing-button {
-        color: var(--white);
+        color: var(--gray-high);
         font-size: 0.8rem;
         width: 30px;
         height: 30px;
@@ -360,7 +361,7 @@ footer {
     padding-top: 6rem;
     background: radial-gradient(ellipse at top right, #d49583, #5e62a6, transparent);
     background-color: var(--blue);
-    z-index: 10000;
+    z-index: 10001;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -388,6 +389,7 @@ footer {
         font-size: 2rem;
         cursor: pointer;
         top: 2rem;
+        color: var(--gray-high);
     }
 
     & .visualizer {

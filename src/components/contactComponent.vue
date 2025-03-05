@@ -18,10 +18,10 @@
             <form class="contact-form list" @submit.prevent="sendContact()">
                 <h3 class="section-title">CONTATO</h3>
                 <div class="form-group">
-                    <input type="text" placeholder="Nome" required maxlength="255" v-model="nome">
+                    <input type="text" placeholder="Nome" required maxlength="255" v-model="nome" :disabled="$user.given_name != ''">
                 </div>
                 <div class="form-group">
-                    <input type="email" placeholder="E-mail" required maxlength="255" v-model="email">
+                    <input type="email" placeholder="E-mail" required maxlength="255" v-model="email" :disabled="$user.email != ''">
                 </div>
                 <div class="form-group">
                     <select required v-model="motivo">
@@ -36,7 +36,7 @@
                 <div class="form-group">
                     <textarea required placeholder="Mensagem" maxlength="5000" v-model="mensagem"></textarea>
                 </div>
-                <button class="btn primary-button" type="submit">Enviar</button>
+                <button class="btn primary-button" :class="loading ? 'btn-loading' : ''" type="submit" :disabled="loading">Enviar</button>
             </form>
         </div>
     </section>
@@ -47,14 +47,22 @@ export default {
         return {
             mensagem: "",
             motivo: "",
-            email: "",
-            nome: "",
-            sended: false
+            email: this.$user.email,
+            nome: this.$user.given_name,
+            sended: false,
+            loading: false
         }
     },
     watch: {
         sended: function () {
             this.toggleSended();
+        },
+        $user: {
+            handler() {
+                this.email = this.$user.email;
+                this.nome = this.$user.given_name;
+            },
+            deep: true
         }
     },
     methods: {
@@ -85,10 +93,15 @@ export default {
                 nome: this.nome
             }
 
-            console.log(data);
+            this.loading = true;
 
-            setTimeout(() => {
+            this.$api.post("usuarios/contact", data).then(() => {
                 this.sended = true;
+                this.loading = false;
+
+                setTimeout(() => {
+                    this.toggleSend();
+                }, 10 * 1000)
             })
         }
     },
@@ -109,6 +122,7 @@ ul {
 strong {
     width: 100px;
     display: inline-block;
+    color: var(--gray-high);
 }
 
 .contact-form {

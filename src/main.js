@@ -2,6 +2,8 @@ import { createApp, reactive } from 'vue'
 import './style.css'
 import App from './App.vue'
 import vue3GoogleLogin from 'vue3-google-login';
+import $ from 'jquery';
+import api from "../configs/api";
 
 const app = createApp(App);
 app.config.globalProperties.$radioData = reactive({ history: [], title: "", art: "" });
@@ -13,6 +15,31 @@ app.config.globalProperties.$user = reactive({
     picture: "",
     verified_email: false
 });
+
+app.config.globalProperties.$api = reactive(api);
+
+app.config.globalProperties.$showToast = (message, color) => {
+    $('#liveToast .toast-body').text(message);
+
+    // Alterar a cor do toast com base no parâmetro 'color'
+    $('#liveToast').removeClass();
+    if (color === 'success') {
+        $('#liveToast').addClass('toast align-items-center text-bg-success border-0');
+    } else if (color === 'error') {
+        $('#liveToast').addClass('toast align-items-center text-bg-danger border-0');
+    } else if (color === 'warning') {
+        $('#liveToast').addClass('toast align-items-center text-bg-warning border-0');
+    }
+
+    // Posicionar o toast no canto superior direito
+    $('#toastContainer').removeClass().addClass('position-fixed p-3');
+    $('#toastContainer').css({ top: '2rem', right: '2rem', bottom: '', zIndex: 99999 });
+
+    // Mostrar o toast
+    var toastEl = $('#liveToast')[0];
+    var toast = new bootstrap.Toast(toastEl);
+    toast.show();
+}
 
 import axios from 'axios';
 

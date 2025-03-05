@@ -1,15 +1,14 @@
 <template>
   <div class="system-frame">
     <headerComponent @changeLink="changeContent($event)" />
-    <authUser />
     <main class="main-frame">
       <searchComponent @searchSong="search($event)" />
       <div class="home-frame">
-        <homeComponent v-if="selectedMenu.home" />
-        <scheduleComponent v-if="selectedMenu.schedule" />
-        <songsComponent :search="searchString" v-if="selectedMenu.music" />
-        <partnershipsComponent v-if="selectedMenu.business" />
-        <contactComponent v-if="selectedMenu.contact" />
+        <homeComponent @starredMusic="reloadMusics = true" v-show="selectedMenu.home" />
+        <scheduleComponent v-show="selectedMenu.schedule" />
+        <songsComponent :reloadMusics="reloadMusics" @reloadedMusics="reloadMusics = false" :search="searchString" v-show="selectedMenu.music" />
+        <partnershipsComponent v-show="selectedMenu.business" />
+        <contactComponent v-show="selectedMenu.contact" />
       </div>
     </main>
     <img class="system-side-image" id="image1" loading="lazy" :style="'opacity: ' + (selectedMenu.home ? 1 : 0)" :src="woman">
@@ -18,6 +17,16 @@
     <img class="system-side-image" id="image4" loading="lazy" :style="'opacity: ' + (selectedMenu.business ? 1 : 0)" :src="business">
     <img class="system-side-image" id="image5" loading="lazy" :style="'opacity: ' + (selectedMenu.contact ? 1 : 0)" :src="smartphone">
     <footerComponent />
+    <div class="position-fixed p-3" id="toastContainer" style="z-index: 11; bottom: 0; right: 0;">
+        <div id="liveToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    Notificação padrão
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
   </div>
 </template>
 
@@ -32,7 +41,6 @@ import scheduleComponent from "./components/scheduleComponent.vue";
 import songsComponent from "./components/songsComponent.vue";
 import partnershipsComponent from "./components/partnershipsComponent.vue";
 import contactComponent from "./components/contactComponent.vue";
-import authUser from "./components/authUser.vue";
 
 import woman from "./assets/img/sides/woman.webp";
 import microphone from "./assets/img/sides/microphone.webp";
@@ -58,7 +66,8 @@ export default {
         business: false,
         contact: false
       },
-      searchString: ""
+      searchString: "",
+      reloadMusics: false
     };
   },
   watch: {
@@ -150,8 +159,7 @@ export default {
     scheduleComponent,
     songsComponent,
     partnershipsComponent,
-    contactComponent,
-    authUser
+    contactComponent
   }
 };
 </script>

@@ -3,7 +3,7 @@
         <h3 class="section-title">ÚLTIMAS TOCADAS</h3>
         <ul class="last-musics">
             <li v-for="(music, index) in lastMusics" :key="index" class="song">
-                <i class="fa-star" :class="music.starred ? 'fa-solid' : 'fa-regular'"></i>
+                <i class="fa-star" :class="music.starred ? 'fa-solid' : 'fa-regular'" v-on:click="starMusic(music)" :title="music.starred ? 'Desfavoritar' : 'Favoritar'"></i>
                 <div class="entity-informations">
                     <p class="principal-text-md">{{ music.title }}</p>
                     <p class="fontsize-sm">{{ music.author }}</p>
@@ -16,35 +16,49 @@
 export default {
     data() {
         return {
-            lastMusics: [/*
-                {
-                    id: 0,
-                    title: "Todavia Me Alegrarei (Ao Vivo)",
-                    author: "Samuel Messias",
-                    starred: false
-                },
-                {
-                    id: 1,
-                    title: "Todavia Me Alegrarei (Ao Vivo)",
-                    author: "Samuel Messias",
-                    starred: true
-                },
-                {
-                    id: 2,
-                    title: "Todavia Me Alegrarei (Ao Vivo)",
-                    author: "Samuel Messias",
-                    starred: true
-                },
-                {
-                    id: 3,
-                    title: "Todavia Me Alegrarei (Ao Vivo)",
-                    author: "Samuel Messias",
-                    starred: false
-                }
-            */]
+            lastMusics: [],
+            favoritedMusics: []
+        }
+    },
+    watch: {
+        '$radioData.history': function () {
+            this.getFavoritedMusics(this.$radioData.history);
         }
     },
     methods: {
+        starMusic: function (music) {
+            let self = this;
+
+            if (!localStorage.getItem("onlywayJwt")) {
+                this.$showToast("Faça login para acessar essa função.", "error");
+
+                return;
+            }
+
+            if (music.starred) {
+                this.$api.post("usuarios/toggle-star-music", { music: music }).then(() => {
+                    self.$showToast("Música desfavoritada com sucesso.", "success");
+                    music.starred = !music.starred;
+                    this.getFavoritedMusics(this.$radioData.history);
+                    this.$emit("starredMusic");
+                })
+            } else {
+                this.$api.post("usuarios/toggle-star-music", { music: music }).then(() => {
+                    self.$showToast("Música favoritada com sucesso.", "success");
+                    music.starred = !music.starred;
+                    this.getFavoritedMusics(this.$radioData.history);
+                    this.$emit("starredMusic");
+                })
+            }
+        },
+        getFavoritedMusics: function (radioData) {
+            let self = this;
+
+            this.$api.get("usuarios/get-favorited-musics").then((response) => {
+                self.favoritedMusics = response.data.returnObj;
+                self.fillLastSongs(radioData);
+            })
+        },
         fillLastSongs: function (history) {
             let newArray = [];
 
@@ -53,17 +67,24 @@ export default {
 
                 const cleanedString = musicString.replace(/^\d+\.\)\s*/, '').replace(/<br>$/, '');
 
-                if (cleanedString.indexOf("onlyway") != -1) {
+                if (cleanedString.toLowerCase().indexOf("onlyway") != -1) {
                     continue;
                 }
 
                 // Separar artistas e título
                 const [artistsString, title] = cleanedString.split(' - ');
 
+                let staredMusic = false;
+
+                if (this.favoritedMusics.some((music) => { return music.identifier == cleanedString }) ) {
+                    staredMusic = true;
+                }
+
                 // Retornar o objeto
                 let filteredList = {
                     title: title.trim(),
-                    author: artistsString
+                    author: artistsString,
+                    starred: staredMusic
                 }
 
                 if (newArray.length == 4) {
@@ -75,15 +96,6 @@ export default {
 
             this.lastMusics = newArray;
         }
-    },
-    mounted: function () {
-        let interval = setInterval(() => {
-            if (this.$radioData.title != "") {
-                clearInterval(interval);
-
-                this.fillLastSongs(this.$radioData.history);
-            }
-        })
     }
 }
 </script>

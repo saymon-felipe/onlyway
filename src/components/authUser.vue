@@ -22,7 +22,7 @@
                 </GoogleLogin>
             </div>
         </div>
-        <div class="wrapper" v-on:click="openContainer = false"></div>
+        <div class="wrapper" v-if="openContainer" v-on:click="openContainer = false"></div>
     </div>
     
 </template>

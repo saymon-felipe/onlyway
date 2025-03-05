@@ -3,7 +3,8 @@ import axios from 'axios'
 let url_api;
 
 const dev_environment = "http://192.168.15.43:3000/"; //Ambiente de desenvolvimento.
-const test_environment = "https://onlyway-api-e74aed39b45b.herokuapp.com/"; //Ambiente de teste ou produção.
+const test_environment = "https://onlyway-api-e74aed39b45b.herokuapp.com/"; //Ambiente de teste.
+const prod_environment = "https://onlyway-api-e74aed39b45b.herokuapp.com/"; //Ambiente de produção.
 
 // https://gourmetech-coreteste-5d758e07e0da.herokuapp.com/  --  ambiente de teste
 // https://gourmetech-core-46715094ffeb.herokuapp.com/       --  ambiente de produção         
@@ -34,6 +35,9 @@ switch (ambient) {
         break;
     case 1: 
         url_api = test_environment;
+        break;
+    case 2: 
+        url_api = prod_environment;
         break;
 }
 

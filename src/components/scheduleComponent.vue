@@ -19,21 +19,9 @@ export default {
             schedules: [
                 {
                     id: 0,
-                    time: "05:00 - 06:00",
-                    title: "Oração da Madrugada - (com Thony Cezar)",
-                    description: "Momento de intercessão e reflexão matinal."
-                },
-                {
-                    id: 1,
-                    time: "05:00 - 06:00",
-                    title: "Oração da Madrugada - (com Thony Cezar)",
-                    description: "Momento de intercessão e reflexão matinal."
-                },
-                {
-                    id: 2,
-                    time: "05:00 - 06:00",
-                    title: "Oração da Madrugada - (com Thony Cezar)",
-                    description: "Momento de intercessão e reflexão matinal."
+                    time: "00:00 - 23:59",
+                    title: "Louvor Sem Fim - (Só as melhores)",
+                    description: "As melhores músicas gospel, 24h por dia, para encher seu coração de fé e adoração!"
                 }
             ]
         }

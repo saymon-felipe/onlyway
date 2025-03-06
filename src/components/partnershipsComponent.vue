@@ -5,7 +5,7 @@
             <li v-for="(company, index) in companies" :key="index" class="company">
                 <img :src="company.image" :alt="company.name">
                 <div class="entity-informations">
-                    <p class="principal-text-md link" :title="'Clique para ir para o siteda empresa ' + company.name">
+                    <p class="principal-text-md link" :title="'Clique para ir para o site da empresa ' + company.name">
                         <a :href="company.url" target="_blank">
                             {{ company.name }}
                         </a>

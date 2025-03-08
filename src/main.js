@@ -41,6 +41,38 @@ app.config.globalProperties.$showToast = (message, color) => {
     toast.show();
 }
 
+app.config.globalProperties.$setJwtInLocalStorage = (jwt, user = null) => {
+    localStorage.setItem("onlywayJwt", jwt);
+    if (user) {
+        localStorage.setItem("user", JSON.stringify(user));
+    }
+}
+
+app.config.globalProperties.$removeJwtFromLocalStorage = () => {
+    localStorage.removeItem("onlywayJwt");
+    localStorage.removeItem("user");
+}
+
+app.config.globalProperties.$checkJWT = () => {
+    return new Promise((resolve, reject) => {
+        if (!localStorage.getItem("user") || !localStorage.getItem("onlywayJwt")) {
+            reject();
+        } else {
+            api.post("/usuarios/check_jwt", { token: localStorage.getItem("onlywayJwt") }) // Se ja estiver logado no sistema e acessar a página de login, é checkado a valia do token JWT e então redirecionado para a index.
+            .then(function (res) { 
+                app.config.globalProperties.$setJwtInLocalStorage(res.data.returnObj); // Setando o novo jwt que foi resetado
+                resolve();
+            }).catch(() => {
+                reject();
+            })
+        }
+    })
+}
+
+setInterval(() => {
+    app.config.globalProperties.$checkJWT();
+}, 20 * 60 * 1000) // A cada 20 minutos
+
 import axios from 'axios';
 
 function requireRadioData() {

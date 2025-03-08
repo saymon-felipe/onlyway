@@ -44,28 +44,25 @@ export default {
 
             this.$api.post("usuarios/google-login", { token: response.code }).then((results) => {
                 Object.assign(this.$user, results.data.returnObj.user);
-                localStorage.setItem("user", JSON.stringify(this.$user));
-                localStorage.setItem("onlywayJwt", results.data.returnObj.token);
+                this.$setJwtInLocalStorage(results.data.returnObj.token, this.$user);
 
                 this.$api.defaults.headers.common['Authorization'] = `Bearer ${results.data.returnObj.token}`;
             })
         },
         logout: function () {
             this.openContainer = false;
-            localStorage.removeItem("user");
-            localStorage.removeItem("onlywayJwt");
+            this.$removeJwtFromLocalStorage();
             this.$api.defaults.headers.common['Authorization'] = "";
             Object.assign(this.$user, { email: "", given_name: "", id: "", name: "", picture: "", verified_email: false });
         }
     },
     mounted: function () {
-        let user = localStorage.getItem("user");
-        let jwt = localStorage.getItem("onlywayJwt");
-
-        if (user && jwt) {
-            Object.assign(this.$user, JSON.parse(user));
-            this.$api.defaults.headers.common['Authorization'] = `Bearer ${jwt}`;
-        }
+        this.$checkJWT().then(() => {
+            Object.assign(this.$user, JSON.parse(localStorage.getItem("user")));
+            this.$api.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem("onlywayJwt")}`;
+        }).catch(() => {
+            this.$removeJwtFromLocalStorage();
+        })
     }
 }
 </script>
